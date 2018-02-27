@@ -163,10 +163,10 @@ REQUIREMENTS_FILE_TEMPLATE = '%s/install/requirements.txt'
 SITES_HOME =  os.path.split(os.path.split(os.path.realpath(__file__))[0])[0]
 
 try:
-    from version_info import *
+    from version_info import VERSION
 except:
-    version_info = None
-    
+    VERSION = None
+
 p =  os.path.split(os.path.realpath(__file__))[0]
 if not os.path.exists('%s/globaldefaults.py' % p):
     ## silently copy the defualts file
