@@ -1,1 +1,1 @@
-from . base_info_handler import BaseinfoHander
+from . base_info_handler import BaseinfoHandler

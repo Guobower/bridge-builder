@@ -3,7 +3,7 @@ from unittest.mock import patch, Mock
 
 import os
 import sys
-
+from io import StringIO
 
 """
 Base info is data stores in the config folder, that is individual for each 
@@ -42,11 +42,15 @@ base_info = {
 
 class HandelBaseInfo(unittest.TestCase):
     @patch('scripts.BaseinfoHandler')
-    def test_load_need_base_info_settings(self):
+    def test_load_need_base_info_settings(self, MockBaseinfoHandler):
         """
         make sure we can change the path to the file of personal aliases
         """
-        print('--------------->', my_import('BB_HOME') )
+        output = StringIO.StringIO()
+        input = StringIO.StringIO()
+
+        handler = MockBaseinfoHandler(output, output)
+        print('--------------->',handler )
 
 if __name__ == '__main__':
     unittest.main()
