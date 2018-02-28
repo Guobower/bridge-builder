@@ -1,6 +1,6 @@
 **/*.pyc
 *.wp?
-python
+python/*
 localdata.py
 sites_pw.py
 config/base_info.py

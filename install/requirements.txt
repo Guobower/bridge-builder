@@ -1,0 +1,3 @@
+# list of reqiured module we want to have installed for bridge-builder
+sphinx
+requests

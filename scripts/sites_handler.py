@@ -11,6 +11,8 @@ from copy import deepcopy
 from config.base_info import base_info as BASE_INFO
 from config import ACT_USER
 from scripts.messages import *
+import click
+
 
 class UpdateError(subprocess.CalledProcessError):
     """Specific class for errors occurring during updates of existing repos.
@@ -62,7 +64,7 @@ class SitesHandler(object):
             # BB, move localdata to config
             if os.path.exists('%s/localdata.py' % self.base_path):
                 open(p1, 'w').write(open('%s/localdata.py' % self.base_path, 'r').read())
-                print LOCALDATA_MOVED % ('%s/localdata.py' % self.base_path, p1)
+                click.echo( LOCALDATA_MOVED % ('%s/localdata.py' % self.base_path, p1))
                 os.unlink('%s/localdata.py' % self.base_path)
                 try:
                     os.unlink('%s/localdata.pyc' % self.base_path)
@@ -71,14 +73,14 @@ class SitesHandler(object):
                 sys.exit()
             # silently copy the defaults file
             open(p1, 'w').write(open(p2, 'r').read())
-            print LOCALDATA_CREATED % p1
+            click.echo( LOCALDATA_CREATED % p1)
             sys.exit()
         else:
             data = open(p1, 'r').read().split('\n')
             m = re.compile(r'[^#]+UNEDITED')
             for line in data:
                 if m.match(line):
-                    print LOCALDATA_NOT_EDITED % p1
+                    click.echo( LOCALDATA_NOT_EDITED % p1)
 
     def check_and_copy_globaldefaults(self):
         #GLOBALDEFAULTS = {
@@ -111,7 +113,7 @@ class SitesHandler(object):
         if sites_list_url == 'localhost':
             bp = '/' + '/'.join([p for p in sites_list_path.split('/') if p][:-1])
             if not os.path.exists(bp):
-                print LOCALSITESLIST_BASEPATH_MISSING % bp
+                click.echo( LOCALSITESLIST_BASEPATH_MISSING % bp)
             p1 = sites_list_path
             if not os.path.exists(p1):
                 os.makedirs(p1)
@@ -129,7 +131,7 @@ class SitesHandler(object):
                 open('%s/sites_local/demo_local.py' % p1, 'w').write(SITES_GLOBAL_TEMPLATE % (
                     'demo_global', template % {'site_name' : 'demo_local', 'marker' : self.marker, 
                                                'base_sites_home' : '/home/%s/odoo_instances' % ACT_USER}))
-                print LOCALSITESLIST_CREATED % (os.path.normpath('%s/sites_global/demo_global.py' % p1), os.path.normpath('%s/sites_local/demo_local.py' % p1))
+                click.echo( LOCALSITESLIST_CREATED % (os.path.normpath('%s/sites_global/demo_global.py' % p1), os.path.normpath('%s/sites_local/demo_local.py' % p1)))
                 sys.exit()
                 
 
@@ -146,7 +148,7 @@ class SitesHandler(object):
                     env=dict(os.environ,  PATH='/usr/bin'),
                     shell=True)
                 p.communicate()
-            print LOCALSITESLIST_CLONED % (sites_list_url, os.getcwd())
+            click.echo( LOCALSITESLIST_CLONED % (sites_list_url, os.getcwd()))
             os.chdir(act)
         return sites_list_path
 
@@ -240,10 +242,10 @@ class SitesHandler(object):
     def _add_site(self, where, template):
         site_name = self.handler.site_name
         if self.handler.sites.get(site_name):
-            print "site %s allready defined" % site_name
+            click.echo( "site %s allready defined" % site_name)
             return
         if site_name.find('.') > -1 :
-            print SITE_ADDED_NO_DOT % site_name
+            click.echo( SITE_ADDED_NO_DOT % site_name)
             return
         sites_list_path = os.path.normpath(self.sites_list_path)
         if where not in ['L', 'G']:
@@ -252,8 +254,8 @@ class SitesHandler(object):
             #m = re.compile(r'\n%s' % MARKER)
             #sites = open('%s/sites_global.py' % sites_list_path).read()
             #if not m.search(sites):
-                #print "ERROR: the marker could not be found in sites.py"
-                #print "make sure it exists and starts at the beginning of the line"
+                #click.echo( "ERROR: the marker could not be found in sites.py")
+                #click.echo( "make sure it exists and starts at the beginning of the line")
                 #return
             #open('%s/sites_global.py' % sites_list_path, 'w').write(m.sub(template, sites))
             

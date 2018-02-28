@@ -17,7 +17,7 @@ Now when you *open a new shell* workon is ready for you to use.
 `mkvirtualenv --python=python3.6 bridgebuilder`  
 We now can use this virtual environment by executing  
 `workon bridgebuilder`  
-and leav it again:  
+and leave it again:  
 `deactivate`  
 or just run workon with the name of an other environment. Very handy!
 
@@ -27,8 +27,11 @@ As good python citizen we set up a test environment as our very next step now. T
 Activate a virtual env with `ẁorkon bridgebuilder`
 execute `bin/set_python.py`
 
-## install spinx
-To create the documentation we need to install sphinx  
-`bin/pip install sphinx`
+## create entries for pip and python in the bin directory
+# this is not strictly nessecary, but ofthen convinient
+`bin/set_python.py`
+
+## install all libraries bridgebuilder needs
+`pip install -r install/requirements.txt`
 
 
