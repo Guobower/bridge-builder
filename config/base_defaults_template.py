@@ -6,6 +6,11 @@ It will be read and checked for new entries each time a bridgebuilder is started
 """
 BASE_DEFAULTS = {
     #name, explanation, default
+    'editor' : (
+        'editor',                 # display
+        'what editor to use when editing a server or site description',    # help
+        'pico'       # default
+    ),
     'sitesinfo_path' : (
         'sitesinfo path',                 # display
         'path to the folder where sites.py and sites_local.py is found\nThis folder should be maintained by git',    # help

@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, Mock
+from scripts.base_info_handler import BaseinfoHandler
 
 import os
 import sys
@@ -40,16 +40,17 @@ base_info = {
 """
 
 
+
 class HandeleBaseInfo(unittest.TestCase):
-    @patch('scripts.BaseinfoHandler')
-    def test_load_need_base_info_settings(self, MockBaseinfoHandler):
+    def test_load_need_base_info_settings(self):
         """
         make sure we can change the path to the file of personal aliases
         """
-        output = StringIO.StringIO()
-        input = StringIO.StringIO()
+        handler = BaseinfoHandler(testing=True)
 
-        handler = MockBaseinfoHandler(output, output)
+        
+        result = handler.get_single_value('sitesinfo_path')
+        self.assertEqual(result, '%(BB_HOME)s/sites_list/')
         print('--------------->',handler )
 
 if __name__ == '__main__':

@@ -132,9 +132,10 @@ if not os.path.exists('%s/globaldefaults.py' % p):
     ## silently copy the defualts file
     #act = os.getcwd()
     #os.chdir(p)
-    open('%s/globaldefaults.py' % p, 'w').write(open('%s/../templates/globaldefaults.py' % p, 'r').read())
+    open('%s/globaldefaults.py' % p, 'w').write('import collections\nGLOBALDEFAULTS=collections.OrderedDict()')
     #os.chdir(act)
-from globaldefaults import GLOBALDEFAULTS
+from . import globaldefaults
+GLOBALDEFAULTS = globaldefaults.GLOBALDEFAULTS
 
 # NEED_NAME is a list of options that must provide a name
 NEED_NAME = [
