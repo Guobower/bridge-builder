@@ -9,7 +9,7 @@ BASE_DEFAULTS = {
     'sitesinfo_path' : (
         'sitesinfo path',                 # display
         'path to the folder where sites.py and sites_local.py is found\nThis folder should be maintained by git',    # help
-        '%s/sites_list/' % BASE_PATH  # default
+        '%(BB_HOME)s/sites_list/'       # default
     ),
     'sitesinfo_url' : (
         'sitesinfo url',                 # display
@@ -19,12 +19,12 @@ BASE_DEFAULTS = {
     'project_path' : (
         'project path',                 # display
         'path to the projects\nHere a structure for each odoo site is created to build and run odoo servers',         # help
-        '%s/projects' % user_home  # default
+        '%(user_home)s/projects'        # default
     ),
     'odoo_server_data_path' : (
         'server data path',              # display
         'path to server data. Here for every site a set of folders is created\nthat will contain the servers config filestore, log- and dump-files.',          # help
-        '%s/odoo_instances' % user_home  # default
+        '%(user_home)s/odoo_instances'   # default
     ),
     #'docker_path_map' : (
         #'docker path map. use , to separate parts',              # display
@@ -46,6 +46,6 @@ BASE_DEFAULTS = {
     'local_user_mail' : (
         'mail address of the local user',              # display
         'mail address of the local user', # help
-        '%s@redo2oo.ch' % ACT_USER,
+        '%(ACT_USER)s@redo2oo.ch',
     )
 }

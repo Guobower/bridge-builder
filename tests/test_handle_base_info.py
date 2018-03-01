@@ -40,7 +40,7 @@ base_info = {
 """
 
 
-class HandelBaseInfo(unittest.TestCase):
+class HandeleBaseInfo(unittest.TestCase):
     @patch('scripts.BaseinfoHandler')
     def test_load_need_base_info_settings(self, MockBaseinfoHandler):
         """

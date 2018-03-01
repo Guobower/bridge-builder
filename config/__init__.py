@@ -5,6 +5,7 @@ import sys
 # BB_HOME points to the installations folder of bridge builder
 BB_HOME = os.sep.join( os.path.abspath(__file__).split(os.sep)[:-2])
 
+
 BASE_INFO = {}
 import getpass
 ACT_USER = getpass.getuser()
@@ -31,6 +32,9 @@ You will be asked to provide some config data again.
 # base defaults are the defaults we are using for the base info if they where not set
 user_home = os.path.expanduser('~')
 from . base_defaults_template import BASE_DEFAULTS
+for k, v in BASE_DEFAULTS.items():
+    for vv in v:
+        vv = vv % globals()
 try:
     from base_info import base_info as BASE_INFO
     NEED_BASEINFO = False

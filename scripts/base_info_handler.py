@@ -100,7 +100,7 @@ class BaseinfoHandler(object):
     def set_base_info(self):
         "write base info back to the config folder"
         info = 'base_info = %s' % self.info_dic
-        open(self.outfile, 'w').write(info)
+        open(self.out_file, 'w').write(info)
 
     def get_base_info(self, base_info, base_defaults):
         "collect base info from user, update base_info"
@@ -108,7 +108,7 @@ class BaseinfoHandler(object):
             name, explanation, default = v
             # use value as stored, default otherwise
             default = BASE_INFO.get(k, default)
-            base_info[k] = get_single_value(name, explanation, default)
+            base_info[k] = self.get_single_value(name)
 
     # ----------------------------------
     # update_base_info
