@@ -6,6 +6,7 @@ class BaseinfoHandler(object):
     out_file = None # fileobject to write data to
     in_file  = None # fileobject to get data from
     info_dic = collections.OrderedDict()
+    base_info_path = ''
 
     """
     
@@ -54,6 +55,19 @@ class BaseinfoHandler(object):
             info = base_defaults_template.BASE_DEFAULTS
             for k,v in info.items():
                 self.info_dic[k] = v
+                
+    def need_baseinfo(self):
+        """
+        try to find out whther the basinfo settings need to be reevaluated
+        """
+        from config import base_defaults_template as BDT
+        from config import globaldefaults as GD
+        try:
+            from config import base_info
+        except:
+            # if we can not import base info, we need not checking wheter it has changed
+            # and we can return true immeidatey
+            return True                
 
     # ----------------------------------
     # get_single_value
@@ -113,5 +127,5 @@ class BaseinfoHandler(object):
                 GLOBALDEFAULTS=collections.OrderedDict(%s)
                 """ % self.info_dic.items()               
                 open(path, 'w').write(template)
-            click.echo('%s created' % base_info_path)
+            click.echo('%s created' % self.base_info_path)
 

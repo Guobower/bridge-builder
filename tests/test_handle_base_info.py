@@ -3,7 +3,7 @@ from scripts.base_info_handler import BaseinfoHandler
 
 import os
 import sys
-from io import StringIO
+#from io import StringIO
 
 """
 Base info is data stores in the config folder, that is individual for each 
@@ -42,6 +42,13 @@ base_info = {
 
 
 class HandeleBaseInfo(unittest.TestCase):
+    def test_load_need_base_info(self):
+        """
+        when no baseinfo exists, need baseinfo must be set
+        """
+        handler = BaseinfoHandler()
+        self.assertTrue(handler.need_baseinfo())
+        
     def test_load_need_base_info_settings(self):
         """
         make sure we can change the path to the file of personal aliases
@@ -51,7 +58,6 @@ class HandeleBaseInfo(unittest.TestCase):
         
         result = handler.get_single_value('sitesinfo_path')
         self.assertEqual(result, '%(BB_HOME)s/sites_list/')
-        print('--------------->',handler )
 
 if __name__ == '__main__':
     unittest.main()

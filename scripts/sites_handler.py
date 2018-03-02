@@ -55,7 +55,7 @@ class SitesHandler(object):
         self.base_path = base_path
         self.check_and_copy_local_data()
         self.check_and_copy_globaldefaults()
-
+        
     def check_and_copy_local_data(self):
         # make sure config localdata exists and is correctly edited
         p1 =  '%s/config/localdata.py' % self.base_path
