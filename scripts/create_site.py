@@ -46,7 +46,6 @@ def bb(ctx, repo_home, config, verbose):
     - flectra\n
     - cubicerp
 
-
     """
     # Create a Builder object and remember it as as the context object.  From
     # this point onwards other commands can refer to it by using the
@@ -94,16 +93,29 @@ def docker(repo, src, dest, shallow, rev):
 
 
 @bb.command()
-@click.confirmation_option()
-@builder_repo
-def support(repo):
-    """Deletes a repository.
-
-    This will throw away the current repository.
+@click.option('--show', '-s', is_flag=True, help='Lists actual settings')
+@click.option('--reset', '-r', is_flag=True, help='Reset local settings')
+@click.option(
+    '--set', 
+    default='all', 
+    help="""
+    Set local settings.
+    By default all settings should be set.
+    You can provide a comma separated list of names you wish to set.
+    This can be name=value,name2=value2...
     """
-    click.echo('Destroying repo %s' % repo.home)
-    click.echo('Deleted!')
-
+)
+@builder_repo
+def support(repo, show, reset, set):
+    """ Provides support commands to 
+    maintain the evironment
+    """
+    from scripts import base_info_handler
+    handler = base_info_handler.BaseinfoHandler(reset = reset)
+    if show:
+        handler.show_base_info()
+    if set:
+        handler.ask_all_values(set)
 
 @bb.command()
 @click.option('--username', prompt=True,

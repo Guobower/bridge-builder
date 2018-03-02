@@ -7,8 +7,7 @@ BB_HOME = os.sep.join( os.path.abspath(__file__).split(os.sep)[:-2])
 
 
 BASE_INFO = {}
-import getpass
-ACT_USER = getpass.getuser()
+
 # some formatting colors
 class bcolors:
     """
@@ -21,42 +20,15 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+    
+# create a bas_info_handler that deals with all geting and setting of base info
+from scripts.base_info_handler import BaseinfoHandler
+base_info_handler = BaseinfoHandler()
 
-BASEINFO_CHANGED = """
-%s--------------------------------------------------
-The structure of the config files have changed.
-You will be asked to provide some config data again.
---------------------------------------------------%s
-""" %(bcolors.FAIL, bcolors.ENDC)
-
-# base defaults are the defaults we are using for the base info if they where not set
-user_home = os.path.expanduser('~')
-from . base_defaults_template import BASE_DEFAULTS
-for k, v in BASE_DEFAULTS.items():
-    for vv in v:
-        vv = vv % globals()
-try:
-    from base_info import base_info as BASE_INFO
-    NEED_BASEINFO = False
-    # check whether BASE_DEFAULTS has new keys
-    for k in BASE_DEFAULTS.keys():
-        if not BASE_INFO.has_key(k):
-            NEED_BASEINFO = True
-            print( BASEINFO_CHANGED)
-except ImportError:
-    NEED_BASEINFO = True
 # what folders do we need to create in odoo_sites for a new site
 FOLDERNAMES = ['addons','dump','etc','filestore', 'log', 'ssl']
-# base info filename points to file where some default values are stored
-# base_info = {'project_path': '/home/robert/projects', 'skeleton': 'odoo/skeleton'}
-BASE_INFO_NAME = 'base_info'
-BASE_INFO_FILENAME = '%s/config/%s.py' % (BB_HOME, BASE_INFO_NAME)
 
-PROJECT_DEFAULTS = {
-    #name, explanation, default
-    'projectname' : ('project name', 'what is the project name', 'projectname'),
-    'odoo_version' : ('odoo version', 'version of odoo', '9.0'),
-}
+
 # sites is a combination created from "regular" sites listed in sites.py
 # an a list of localsites listed in local_sites.py
 #from sites import SITES, SITES_L as SITES_LOCAL
@@ -79,37 +51,15 @@ try:
         print( 'please edit config/localdata.py')
     os.chdir(pwd)
 except ImportError:
-    APACHE_PATH = ''
-    SITES, SITES_LOCAL = {},{}
-    MARKER = ''
     sites_handler = None
 except OSError:
     # we probably runing from within docker
-    print( '-------------------------------------->>>>', os.getcwd())
     BASE_INFO['odoo_server_data_path'] = '/mnt/sites'
     if os.getcwd() == '/mnt/sites':
         print( '------------------------------')
         raise ImportError()
-    
-# try to get also NGINX_PATH
-# if not possible, provide warning and assume standard location
-try:
-    from localdata import NGINX_PATH
-except ImportError:
-    print( bcolors.WARNING + '*' * 80)
-    print( 'could not read nginx path from config.localdata')
-    print( 'assuming it is: /etc/nginx/')
-    print( 'you can fix this by executing: bin/e')
-    print( "and adding: NGINX_PATH = '/etc/nginx/'")
-    print( '*' * 80 + bcolors.ENDC)
-    NGINX_PATH = '/etc/nginx/'
-    
-try:
-    from localdata import DB_PASSWORD_LOCAL
-except ImportError:
-    # BBB
-    DB_PASSWORD_LOCAL = 'admin'
 
+# make sure we have the sites-list updated
 if sites_handler:
     # automatically update sites list only, when BASE_INFO[''] is set
     sites_handler.pull()
@@ -137,72 +87,3 @@ if not os.path.exists('%s/globaldefaults.py' % p):
 from . import globaldefaults
 GLOBALDEFAULTS = globaldefaults.GLOBALDEFAULTS
 
-# NEED_NAME is a list of options that must provide a name
-NEED_NAME = [
-    "add_apache",
-    "add_site",
-    "add_site_local",
-    "create",
-    "create_certificate",
-    "create_container",
-    'copy_admin_pw',
-    "dataupdate",
-    "dataupdate_close_connections",
-    "directories",
-    "docker_add_ssh",
-    #"docker_show",
-    "edit_site",
-    "module_add",
-    "module_update",
-    "modules_update",
-    "name",
-    "norefresh",
-    'full_update',
-    'full_update_rebuild',
-    'full_update_rebuild_refresh',
-    'update_install_serversetting',
-]
-
-# NO_NEED_NAME is a list of options that do not need to provide a name
-NO_NEED_NAME = [
-    "add_server",
-    "alias",
-    "docker_create_db_container",
-    "edit_server",
-    "list_sites",
-    "listmodules",
-    "module_create",
-    "pull",
-    "reset",
-    "set_config",
-    "shell",
-    "show",
-    "use_branch",
-]
-# need name and target 
-NEED_TARGET = [
-    'copy_admin_pw',
-]
-# is know IP to remote server needed
-NO_NEED_SERVER_IP = [
-    'edit_site',
-]
-ODOO_VERSIONS = {
-    '9.0' : {
-        'python_ver' : 'python2', 
-        'python_path' : '/usr/bin/python2',
-        'buildout_recipe_link' : "git+https://github.com/anybox/anybox.recipe.odoo#egg=a.r.odoo",
-    }, 
-    '10.0' : {
-        'python_ver' : 'python2', 
-        'python_path' : '/usr/bin/python2',
-        'buildout_recipe_link' : "git+https://github.com/anybox/anybox.recipe.odoo#egg=a.r.odoo",
-    },
-    '11.0' : {
-        'python_ver' : 'python3', 
-        'python_path' : '/usr/bin/python3',
-        'buildout_recipe_link' : "git+https://github.com/anybox/anybox.recipe.odoo#egg=a.r.odoo",
-    }
-}
-FLECTRA_VERSIONS = {
-}

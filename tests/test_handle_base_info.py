@@ -42,22 +42,37 @@ base_info = {
 
 
 class HandeleBaseInfo(unittest.TestCase):
-    def test_load_need_base_info(self):
-        """
-        when no baseinfo exists, need baseinfo must be set
-        """
-        handler = BaseinfoHandler()
-        self.assertTrue(handler.need_baseinfo())
         
     def test_load_need_base_info_settings(self):
         """
         make sure we can change the path to the file of personal aliases
         """
-        handler = BaseinfoHandler(testing=True)
-
-        
-        result = handler.get_single_value('sitesinfo_path')
+        handler = BaseinfoHandler(testing=True)       
+        result = handler.ask_single_value('sitesinfo_path')
         self.assertEqual(result, '%(BB_HOME)s/sites_list/')
+        
+    def test_ask_all_values(self):
+        """
+        let the user set all values
+        this test does not really do anything, it just make sure thet the method can be called
+        """
+        handler = BaseinfoHandler(testing=True)
+        handler.ask_all_values()
+        
+    def test_ask_all_values_with_on_vallue(self):
+        """
+        test we can set one value without setting new value
+        """
+        handler = BaseinfoHandler(testing=True)
+        handler.ask_all_values('editor')
+
+    def test_ask_all_values_with_on_vallue(self):
+        """
+        test we can set one value wit seting new value
+        """
+        handler = BaseinfoHandler(testing=True)
+        handler.ask_all_values('editor=code')
+        self.assertEqual(handler.editor, 'code')
 
 if __name__ == '__main__':
     unittest.main()
